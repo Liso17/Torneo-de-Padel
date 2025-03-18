@@ -1,0 +1,234 @@
+body {
+    font-family: 'Seven Segment', monospace;
+    margin: 0;
+    padding: 20px;
+    background-color: #006633;
+    color: #fff;
+}
+h1, h2 {
+    color: #fff;
+}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+button:hover {
+    background-color: #2980b9;
+}
+input, select {
+    padding: 8px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'Seven Segment', monospace;
+}
+.hidden {
+    display: none;
+}
+#mainPage ul {
+    list-style: none;
+    padding: 0;
+}
+#mainPage li {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#mainPage a {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+}
+#mainPage a:hover {
+    color: #2980b9;
+}
+.back-btn {
+    background-color: #e74c3c;
+}
+.back-btn:hover {
+    background-color: #c0392b;
+}
+.delete-btn {
+    background-color: #e74c3c;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+.match-history {
+    margin-top: 20px;
+}
+.match-history ul {
+    list-style: none;
+    padding: 0;
+}
+.match-history li {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.edit-btn {
+    background-color: #f1c40f;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+.edit-btn:hover {
+    background-color: #d4ac0d;
+}
+.player-list {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+.player-list ul {
+    list-style: none;
+    padding: 0;
+}
+.player-list li {
+    margin: 5px 0;
+}
+
+/* Estilo tipo marcador de tenis */
+.scoreboard-section {
+    background-color: #1a2a44;
+    color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+.scoreboard-section h2 {
+    color: #fff;
+    margin: 0 0 10px 0;
+    font-size: 1.5em;
+}
+.match-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.match-form div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    background: #2c3e50;
+    padding: 10px;
+    border-radius: 5px;
+}
+.match-form label {
+    font-weight: bold;
+    min-width: 60px;
+}
+.match-form input, .match-form select {
+    background: #fff;
+    color: #333;
+    border: none;
+}
+.scoreboard-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.scoreboard-table th, .scoreboard-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #34495e;
+}
+.scoreboard-table th {
+    background-color: #34495e;
+    font-weight: bold;
+}
+.scoreboard-table td {
+    background-color: #1a2a44;
+}
+.scoreboard-table tr:nth-child(even) td {
+    background-color: #2c3e50;
+}
+
+/* Ajuste para la tabla del historial */
+.match-history .scoreboard-table {
+    width: 100%;
+    margin-top: 10px;
+}
+.match-history th, .match-history td {
+    padding: 10px;
+    vertical-align: middle;
+}
+.match-history th:first-child, .match-history td:first-child {
+    text-align: center; /* Fecha centrada */
+}
+.match-history th:nth-child(2), .match-history td:nth-child(2) {
+    text-align: left; /* Parejas a la izquierda */
+}
+.match-history th:nth-child(3), .match-history td:nth-child(3) {
+    text-align: center; /* Botón editar centrado */
+}
+.match-history .match-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.match-history .pair-score {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.match-history .pair-name {
+    flex: 1;
+    min-width: 120px;
+}
+.match-history .sets {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+}
+.match-history .vs {
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Responsividad para celular */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+    button, input, select {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .match-form div {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .scoreboard-table th, .scoreboard-table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+    .match-history .pair-name {
+        min-width: 100px;
+    }
+    .match-history .sets {
+        gap: 5px;
+    }
+}

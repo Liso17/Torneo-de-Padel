@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torneo de Pádel</title>
+    <link href="https://fonts.cdnfonts.com/css/seven-segment" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Página principal -->
+    <div id="mainPage" class="container">
+        <h1>Torneos de Pádel</h1>
+        <h2>Crear Nuevo Torneo</h2>
+        <input type="text" id="tournamentName" placeholder="Nombre del torneo">
+        <button id="createTournamentBtn">Crear</button>
+        <h2>Torneos Guardados</h2>
+        <ul id="tournamentList"></ul>
+    </div>
+
+    <!-- Página del torneo -->
+    <div id="tournamentPage" class="hidden">
+        <div class="container">
+            <h1 id="currentTournamentName"></h1>
+            <button class="back-btn" id="backBtn">Volver a Inicio</button>
+
+            <!-- Configurar jugadores -->
+            <h2>Jugadores</h2>
+            <div>
+                <input type="text" id="playerInput" placeholder="Nombre del jugador">
+                <button id="addPlayerBtn">Agregar Jugador</button>
+            </div>
+            <div class="player-list">
+                <h3>Jugadores Agregados:</h3>
+                <ul id="playerList"></ul>
+            </div>
+
+            <!-- Registrar partido -->
+            <div class="scoreboard-section">
+                <h2>Registrar Partido</h2>
+                <div class="match-form">
+                    <div>
+                        <label>Pareja 1:</label>
+                        <select id="player1a"></select>
+                        <select id="player1b"></select>
+                        <input type="number" id="set1a" min="0" max="7" placeholder="Set 1">
+                        <input type="number" id="set2a" min="0" max="7" placeholder="Set 2">
+                        <input type="number" id="set3a" min="0" max="7" placeholder="Set 3">
+                    </div>
+                    <div>
+                        <label>Pareja 2:</label>
+                        <select id="player2a"></select>
+                        <select id="player2b"></select>
+                        <input type="number" id="set1b" min="0" max="7" placeholder="Set 1">
+                        <input type="number" id="set2b" min="0" max="7" placeholder="Set 2">
+                        <input type="number" id="set3b" min="0" max="7" placeholder="Set 3">
+                    </div>
+                    <div>
+                        <label>Fecha:</label>
+                        <input type="datetime-local" id="matchDate">
+                    </div>
+                </div>
+                <button id="addMatchBtn">Guardar Partido</button>
+            </div>
+
+            <!-- Tablas de puntuaciones -->
+            <div class="scoreboard-section">
+                <h2>Tabla por Parejas</h2>
+                <table class="scoreboard-table" id="pairStandings">
+                    <thead>
+                        <tr>
+                            <th>Pareja</th>
+                            <th>Puntos</th>
+                            <th>Victorias</th>
+                            <th>Derrotas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pairStandingsBody"></tbody>
+                </table>
+            </div>
+
+            <div class="scoreboard-section">
+                <h2>Tabla Individual</h2>
+                <table class="scoreboard-table" id="individualStandings">
+                    <thead>
+                        <tr>
+                            <th>Jugador</th>
+                            <th>Puntos</th>
+                            <th>Victorias</th>
+                            <th>Derrotas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="individualStandingsBody"></tbody>
+                </table>
+            </div>
+
+            <!-- Historial de partidos -->
+            <h2>Historial de Partidos</h2>
+            <div class="match-history">
+                <ul id="matchHistory"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('createTournamentBtn').addEventListener('click', startNewTournament);
+            document.getElementById('backBtn').addEventListener('click', backToMain);
+            document.getElementById('addPlayerBtn').addEventListener('click', addPlayer);
+            document.getElementById('addMatchBtn').addEventListener('click', addMatch);
+        });
+    </script>
+</body>
+</html>
