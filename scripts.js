@@ -2,12 +2,26 @@ let players = [];
 let pairStandings = {};
 let individualStandings = {};
 let currentTournament = null;
-let tournaments = JSON.parse(localStorage.getItem('tournaments')) || {};
+let tournaments = {};
+
+// Cargar datos desde data.json al iniciar
+fetch('data.json')
+    .then(response => response.json())
+    .then(data => {
+        tournaments = data;
+        updateTournamentList();
+    })
+    .catch(error => {
+        console.log('No se pudo cargar data.json, usando localStorage:', error);
+        tournaments = JSON.parse(localStorage.getItem('tournaments')) || {};
+        updateTournamentList();
+    });
+
 const adminPassword = "admin123";
 
 window.onload = function() {
     console.log('Cargando página inicial...');
-    updateTournamentList();
+    // updateTournamentList ya se llama después de cargar data.json
 };
 
 function startNewTournament() {
@@ -24,7 +38,6 @@ function startNewTournament() {
     currentTournament = name;
     tournaments[name] = { players: [], pairStandings: {}, individualStandings: {}, matches: [] };
     localStorage.setItem('tournaments', JSON.stringify(tournaments));
-    console.log('Torneo creado:', tournaments[name]);
     switchToTournamentPage();
     updateTournamentList();
     document.getElementById('tournamentName').value = '';
@@ -292,7 +305,7 @@ function updateStandings() {
             <td>${individualStandings[player].wins}</td>
             <td>${individualStandings[player].losses}</td>
         `;
-        individualBody.appendChild(row); // Corregido: ahora usa individualBody
+        individualBody.appendChild(row);
     });
 }
 
