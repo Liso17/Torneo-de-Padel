@@ -55,6 +55,7 @@ function loadTournament(name) {
     updateStandings();
     updateMatchHistory();
     updatePlayerList();
+    updateDashboard(); // Agregar esta línea
 }
 
 function deleteTournament(name) {
@@ -73,6 +74,8 @@ function switchToTournamentPage() {
         mainPage.classList.add('hidden');
         tournamentPage.classList.remove('hidden');
         document.getElementById('currentTournamentName').textContent = currentTournament;
+        // Mostrar sección de jugadores por defecto
+        showSection('players');
     } else {
         console.error('No se encontraron los elementos mainPage o tournamentPage');
     }
@@ -144,6 +147,25 @@ function updatePlayerSelects() {
     });
 }
 
+function validateSets(sets1, sets2) {
+    // Validar sets individuales
+    for (let i = 0; i < 3; i++) {
+        if (sets1[i] === sets2[i]) return false;
+        if (sets1[i] > 7 || sets2[i] > 7) return false;
+        // Quitar la validación de 7-5 ya que es válido ganar 7-6
+    }
+
+    // Verificar si el partido ya terminó en 2 sets
+    const setsWon1 = sets1.filter((s, i) => s > sets2[i]).length;
+    const setsWon2 = sets2.filter((s, i) => s > sets1[i]).length;
+    
+    if ((setsWon1 === 2 || setsWon2 === 2) && (sets1[2] !== 0 || sets2[2] !== 0)) {
+        return false;
+    }
+
+    return true;
+}
+
 function addMatch() {
     const player1a = document.getElementById('player1a').value;
     const player1b = document.getElementById('player1b').value;
@@ -170,8 +192,8 @@ function addMatch() {
         alert('Los jugadores deben ser distintos y no repetirse entre parejas.');
         return;
     }
-    if (sets1.some(s => s > 7) || sets2.some(s => s > 7)) {
-        alert('Los sets no pueden superar 7 juegos.');
+    if (!validateSets(sets1, sets2)) {
+        alert('Sets inválidos. Recuerda:\n- No puede haber empates\n- Máximo 7 juegos por set\n- Si un set llega a 7, el otro debe ser 5 o menos\n- El tercer set solo se juega si hay empate 1-1');
         return;
     }
     if (!matchDate) {
@@ -221,6 +243,7 @@ function addMatch() {
     localStorage.setItem('tournaments', JSON.stringify(tournaments));
     updateStandings();
     updateMatchHistory();
+    updateDashboard(); // Agregar esta línea antes del final de la función
 
     document.querySelectorAll('input[type="number"]').forEach(input => input.value = '');
     document.getElementById('matchDate').value = '';
@@ -277,6 +300,171 @@ function editMatch(index) {
 
     tournaments[currentTournament].matches.splice(index, 1);
     addMatch();
+}
+
+function calculateStats(tournamentData) {
+    const stats = {
+        totalMatches: tournamentData.matches.length,
+        players: {},
+        pairs: {}
+    };
+
+    // Inicializar estadísticas
+    tournamentData.players.forEach(player => {
+        stats.players[player] = {
+            gamesWon: 0, gamesLost: 0,
+            setsWon: 0, setsLost: 0
+        };
+    });
+
+    // Procesar cada partido
+    tournamentData.matches.forEach(match => {
+        const pair1 = match.pair1.split('-');
+        const pair2 = match.pair2.split('-');
+
+        // Contabilizar sets y games por pareja
+        if (!stats.pairs[match.pair1]) stats.pairs[match.pair1] = { gamesWon: 0, gamesLost: 0, setsWon: 0, setsLost: 0 };
+        if (!stats.pairs[match.pair2]) stats.pairs[match.pair2] = { gamesWon: 0, gamesLost: 0, setsWon: 0, setsLost: 0 };
+
+        match.sets1.forEach((score, i) => {
+            if (score > match.sets2[i]) {
+                stats.pairs[match.pair1].setsWon++;
+                stats.pairs[match.pair2].setsLost++;
+                pair1.forEach(p => stats.players[p].setsWon++);
+                pair2.forEach(p => stats.players[p].setsLost++);
+            } else if (score < match.sets2[i]) {
+                stats.pairs[match.pair2].setsWon++;
+                stats.pairs[match.pair1].setsLost++;
+                pair2.forEach(p => stats.players[p].setsWon++);
+                pair1.forEach(p => stats.players[p].setsLost++);
+            }
+            if (score > 0 || match.sets2[i] > 0) {
+                stats.pairs[match.pair1].gamesWon += score;
+                stats.pairs[match.pair1].gamesLost += match.sets2[i];
+                stats.pairs[match.pair2].gamesWon += match.sets2[i];
+                stats.pairs[match.pair2].gamesLost += score;
+                
+                pair1.forEach(p => {
+                    stats.players[p].gamesWon += score;
+                    stats.players[p].gamesLost += match.sets2[i];
+                });
+                pair2.forEach(p => {
+                    stats.players[p].gamesWon += match.sets2[i];
+                    stats.players[p].gamesLost += score;
+                });
+            }
+        });
+    });
+
+    return stats;
+}
+
+function updateDashboard() {
+    const stats = calculateStats(tournaments[currentTournament]);
+    const dashboardHtml = `
+        <div class="stats-dashboard">
+            <div class="stat-card">
+                <h3>Partidos Totales</h3>
+                <div class="stat-value">${stats.totalMatches}</div>
+            </div>
+            
+            <div class="stats-category">
+                <h3>Estadísticas Individuales</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Jugador</th>
+                            <th>Games Ganados</th>
+                            <th>Games Perdidos</th>
+                            <th>Sets Ganados</th>
+                            <th>Sets Perdidos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${Object.entries(stats.players).map(([player, stat]) => `
+                            <tr>
+                                <td>${player}</td>
+                                <td>${stat.gamesWon}</td>
+                                <td>${stat.gamesLost}</td>
+                                <td>${stat.setsWon}</td>
+                                <td>${stat.setsLost}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="stats-category">
+                <h3>Estadísticas por Parejas</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Pareja</th>
+                            <th>Games Ganados</th>
+                            <th>Games Perdidos</th>
+                            <th>Sets Ganados</th>
+                            <th>Sets Perdidos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${Object.entries(stats.pairs).map(([pair, stat]) => `
+                            <tr>
+                                <td>${pair}</td>
+                                <td>${stat.gamesWon}</td>
+                                <td>${stat.gamesLost}</td>
+                                <td>${stat.setsWon}</td>
+                                <td>${stat.setsLost}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+    document.getElementById('statsDashboard').innerHTML = dashboardHtml;
+}
+
+function showSection(sectionId) {
+    // Ocultar todas las secciones
+    document.querySelectorAll('.section').forEach(section => {
+        section.style.display = 'none';
+    });
+
+    // Si es estadísticas, mostrar/ocultar submenú
+    if (sectionId === 'stats') {
+        const submenu = document.getElementById('statsSubmenu');
+        submenu.classList.toggle('hidden');
+        // Mostrar dashboard de estadísticas
+        document.getElementById('statsSection').style.display = 'block';
+    } else {
+        // Mostrar la sección seleccionada
+        document.getElementById(`${sectionId}Section`).style.display = 'block';
+    }
+
+    // Actualizar contenido según la sección
+    switch(sectionId) {
+        case 'stats':
+            updateDashboard();
+            break;
+        case 'pairTable':
+            updateStandings();
+            break;
+        case 'individualTable':
+            updateStandings();
+            break;
+        case 'history':
+            updateMatchHistory();
+            break;
+    }
+}
+
+function showHistorySection() {
+    // Ocultar todas las secciones
+    document.querySelectorAll('.scoreboard-section').forEach(section => {
+        section.style.display = 'none';
+    });
+    // Mostrar solo el historial
+    document.querySelector('.match-history').style.display = 'block';
 }
 
 function updateStandings() {

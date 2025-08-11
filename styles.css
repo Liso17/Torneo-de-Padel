@@ -17,6 +17,7 @@ h1, h2 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 button {
+    margin-top: 15px;
     background-color: #3498db;
     color: white;
     border: none;
@@ -51,15 +52,24 @@ input, select {
 }
 #mainPage a {
     text-decoration: none;
-    color: #3498db;
+    color: #96cc00;
     font-weight: bold;
 }
 #mainPage a:hover {
-    color: #2980b9;
+    color: #83b300;
 }
 .back-btn {
     background-color: #e74c3c;
+    margin-bottom: 20px;
+    order: -1; /* Esto lo moverá al principio del flex container */
+    margin-top: 0;
+    border-radius: 5px;
+    width: 19%;
+    padding: 10px;
+    font-size: 15px;
+    
 }
+
 .back-btn:hover {
     background-color: #c0392b;
 }
@@ -88,12 +98,12 @@ input, select {
     align-items: center;
 }
 .edit-btn {
-    background-color: #f1c40f;
+    background-color: #96cc00;
     padding: 5px 10px;
     font-size: 12px;
 }
 .edit-btn:hover {
-    background-color: #d4ac0d;
+    background-color: #83b300;
 }
 .player-list {
     margin-top: 10px;
@@ -208,6 +218,128 @@ input, select {
     font-weight: bold;
 }
 
+/* Estilo para el panel de estadísticas */
+.stats-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.stat-card {
+    background: #34495e;
+    padding: 20px;
+    width: 10%;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stats-table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+.stats-table th, .stats-table td {
+    background: #34495e;
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #0d1125;
+}
+
+.stats-table th {
+    background: #2c3e50;
+}
+
+.stats-category {
+    margin-top: 20px;
+    background-color: #020f50;
+}
+
+.stats-category h3 {
+    color: #beff0b;
+    margin-bottom: 10px;
+}
+
+/* Estilo para el menú lateral */
+.side-menu {
+    width: 200px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: #2c3e50;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.side-menu h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.menu-btn {
+    width: 100%;
+    text-align: left;
+    padding: 12px 15px;
+    background: #34495e;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s;
+}
+
+.menu-btn i {
+    width: 20px;
+    text-align: center;
+}
+
+.menu-btn:hover {
+    background: #2980b9;
+}
+
+.submenu {
+    padding-left: 20px;
+}
+
+.submenu .menu-btn {
+    font-size: 0.9em;
+    padding: 10px 15px;
+}
+
+.hidden {
+    display: none;
+}
+
+.main-content {
+    margin-left: 220px;
+    padding: 20px;
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+.stat-card.clickable {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.stat-card.clickable:hover {
+    transform: scale(1.05);
+}
+
 /* Responsividad para celular */
 @media (max-width: 600px) {
     .container {
@@ -230,6 +362,9 @@ input, select {
     }
     .match-history .sets {
         gap: 5px;
+    }
+    .stats-dashboard {
+        grid-template-columns: 1fr;
     }
 }
 button i {

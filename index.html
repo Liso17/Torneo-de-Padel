@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Torneo de Pádel</title>
+    <title>Torneo de Padel</title>
     <link href="https://fonts.cdnfonts.com/css/seven-segment" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="styles.css">
@@ -11,7 +11,7 @@
 <body>
     <!-- Página principal -->
     <div id="mainPage" class="container">
-        <h1>Torneos de Pádel</h1>
+        <h1>Torneos de Padel</h1>
         <h2>Crear Nuevo Torneo</h2>
         <input type="text" id="tournamentName" placeholder="Nombre del torneo">
         <button id="createTournamentBtn"></i>Crear </i><i class="fa-solid fa-trophy"></i></button>
@@ -21,51 +21,82 @@
 
     <!-- Página del torneo -->
     <div id="tournamentPage" class="hidden">
-        <div class="container">
-            <h1 id="currentTournamentName"></h1>
-            <button class="back-btn" id="backBtn">Volver a Inicio</button>
-
-            <!-- Configurar jugadores -->
-            <h2>Jugadores</h2>
-            <div>
-                <input type="text" id="playerInput" placeholder="Nombre del jugador">
-                <button id="addPlayerBtn">Agregar Jugador <i class="fa-solid fa-table-tennis-paddle-ball"></i></button>
+        <div class="side-menu">
+            <h2 id="currentTournamentName"></h2>
+            <button class="menu-btn" onclick="showSection('players')">
+                <i class="fa-solid fa-users"></i> Agregar Jugadores
+            </button>
+            <button class="menu-btn" onclick="showSection('match')">
+                <i class="fa-solid fa-table-tennis-paddle-ball"></i> Registrar Partido
+            </button>
+            <button class="menu-btn" onclick="showSection('stats')" id="statsBtn">
+                <i class="fa-solid fa-chart-line"></i> Estadísticas
+            </button>
+            <div class="submenu hidden" id="statsSubmenu">
+                <button class="menu-btn" onclick="showSection('pairTable')">
+                    <i class="fa-solid fa-people-group"></i> Tabla por Parejas
+                </button>
+                <button class="menu-btn" onclick="showSection('individualTable')">
+                    <i class="fa-solid fa-user"></i> Tabla Individual
+                </button>
             </div>
-            <div class="player-list">
-                <h3>Jugadores Agregados:</h3>
-                <ul id="playerList"></ul>
-            </div>
-
-            <!-- Registrar partido -->
-            <div class="scoreboard-section">
-                <h2>Registrar Partido</h2>
-                <div class="match-form">
-                    <div>
-                        <label>Pareja 1:</label>
-                        <select id="player1a"></select>
-                        <select id="player1b"></select>
-                        <input type="number" id="set1a" min="0" max="7" placeholder="Set 1">
-                        <input type="number" id="set2a" min="0" max="7" placeholder="Set 2">
-                        <input type="number" id="set3a" min="0" max="7" placeholder="Set 3">
-                    </div>
-                    <div>
-                        <label>Pareja 2:</label>
-                        <select id="player2a"></select>
-                        <select id="player2b"></select>
-                        <input type="number" id="set1b" min="0" max="7" placeholder="Set 1">
-                        <input type="number" id="set2b" min="0" max="7" placeholder="Set 2">
-                        <input type="number" id="set3b" min="0" max="7" placeholder="Set 3">
-                    </div>
-                    <div>
-                        <label>Fecha:</label>
-                        <input type="datetime-local" id="matchDate">
-                    </div>
+            <button class="menu-btn" onclick="showSection('history')">
+                <i class="fa-solid fa-clock-rotate-left"></i> Historial
+            </button>
+            <button class="back-btn" onclick="backToMain()">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+        </div>
+        <div class="main-content">
+            <!-- Secciones -->
+            <div id="playersSection" class="section">
+                <h2>Jugadores</h2>
+                <div>
+                    <input type="text" id="playerInput" placeholder="Nombre del jugador">
+                    <button id="addPlayerBtn">Agregar Jugador <i class="fa-solid fa-user-plus"></i></button>
                 </div>
-                <button id="addMatchBtn">Guardar Partido <i class="fa-solid fa-baseball-ball"></i></button>
+                <div class="player-list">
+                    <h3>Jugadores Agregados:</h3>
+                    <ul id="playerList"></ul>
+                </div>
             </div>
 
-            <!-- Tablas de puntuaciones -->
-            <div class="scoreboard-section">
+            <div id="matchSection" class="section">
+                <!-- Contenido existente de registro de partido -->
+                <div class="scoreboard-section">
+                    <h2>Registrar Partido</h2>
+                    <div class="match-form">
+                        <div>
+                            <label>Pareja 1:</label>
+                            <select id="player1a"></select>
+                            <select id="player1b"></select>
+                            <input type="number" id="set1a" min="0" max="7" placeholder="Set 1">
+                            <input type="number" id="set2a" min="0" max="7" placeholder="Set 2">
+                            <input type="number" id="set3a" min="0" max="7" placeholder="Set 3">
+                        </div>
+                        <div>
+                            <label>Pareja 2:</label>
+                            <select id="player2a"></select>
+                            <select id="player2b"></select>
+                            <input type="number" id="set1b" min="0" max="7" placeholder="Set 1">
+                            <input type="number" id="set2b" min="0" max="7" placeholder="Set 2">
+                            <input type="number" id="set3b" min="0" max="7" placeholder="Set 3">
+                        </div>
+                        <div>
+                            <label>Fecha:</label>
+                            <input type="datetime-local" id="matchDate">
+                        </div>
+                    </div>
+                    <button id="addMatchBtn">Guardar Partido <i class="fa-solid fa-baseball-ball"></i></button>
+                </div>
+            </div>
+
+            <div id="statsSection" class="section">
+                <h2>Estadísticas del Torneo</h2>
+                <div id="statsDashboard"></div>
+            </div>
+
+            <div id="pairTableSection" class="section">
                 <h2>Tabla por Parejas</h2>
                 <table class="scoreboard-table" id="pairStandings">
                     <thead>
@@ -80,7 +111,7 @@
                 </table>
             </div>
 
-            <div class="scoreboard-section">
+            <div id="individualTableSection" class="section">
                 <h2>Tabla Individual</h2>
                 <table class="scoreboard-table" id="individualStandings">
                     <thead>
@@ -95,10 +126,11 @@
                 </table>
             </div>
 
-            <!-- Historial de partidos -->
-            <h2>Historial de Partidos</h2>
-            <div class="match-history">
-                <ul id="matchHistory"></ul>
+            <div id="historySection" class="section">
+                <h2>Historial de Partidos</h2>
+                <div class="match-history">
+                    <ul id="matchHistory"></ul>
+                </div>
             </div>
         </div>
     </div>
