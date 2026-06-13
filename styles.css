@@ -11,7 +11,7 @@ h1, h2 {
 .container {
     max-width: 800px;
     margin: 0 auto;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.4);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -251,13 +251,14 @@ input, select {
 }
 
 .stats-category {
-    margin-top: 20px;
+    margin-top: 10px;
     background-color: #020f50;
 }
 
 .stats-category h3 {
     color: #beff0b;
     margin-bottom: 10px;
+    margin-left: 10px;
 }
 
 /* Estilo para el menú lateral */
